@@ -1,2 +1,2 @@
 # TranslitToArmenian
-Translates translit to Հայերեն
+Translates translit text to Հայերեն
