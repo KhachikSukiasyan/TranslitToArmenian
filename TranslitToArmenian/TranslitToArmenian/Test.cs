@@ -10,6 +10,15 @@ namespace TranslitToArmenian
     {
         static void Main(string[] args)
         {
+
+            while (true)
+            {
+                Console.WriteLine("Enter text in translit:");
+                string input = Console.ReadLine();
+                Console.WriteLine(input.Translate());
+                Console.ReadKey();
+            }
+
         }
     }
 }

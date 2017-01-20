@@ -8,12 +8,12 @@ namespace TranslitToArmenian
 {
     public static class Extensions
     {
-        public static string IsValidEmail(this string input)
-        {
-            StringBuilder temp = new StringBuilder();
-            int length = input.Length;
-            Dictionary<string, string> letters = new Dictionary<string, string>();
 
+        static Dictionary<string, string> letters = new Dictionary<string, string>();
+
+
+        static Extensions()
+        {
             letters["a"] = "ա";
             letters["b"] = "բ";
             letters["c"] = "ց";
@@ -40,19 +40,26 @@ namespace TranslitToArmenian
             letters["x"] = "խ";
             letters["y"] = "յ";
             letters["z"] = "զ";
-
-            letters["ch"] = "չ";
-            letters["sh"] = "շ";
-            letters["dz"] = "ձ";
-            letters["ts"] = "ց";
-            letters[" o"] = " օ";
-            letters[" ov "] = "ով";
-            letters[" ovker "] = "ովքեր";
-            letters[" vo"] = " ո";
-            letters["gh"] = "ղ";
-            letters["zh"] = "ժ";
             letters["@"] = "ը";
-            letters[":)"] = "\u263B";
+
+            //letters["ch"] = "չ";
+            //letters["sh"] = "շ";
+            //letters["dz"] = "ձ";
+            //letters["ts"] = "ծ";
+            //letters["ov "] = "ով ";
+            //letters["ovker "] = "ովքեր ";
+            //letters["vo"] = "ո";
+            //letters["gh"] = "ղ";
+            //letters["zh"] = "ժ";
+            //letters[":)"] = "\u263B";
+
+        }
+
+        public static string Translate(this string input)
+        {
+            StringBuilder temp = new StringBuilder();
+            int length = input.Length;
+
 
             for (int i = 0; i < length; i++)
             {
@@ -60,49 +67,127 @@ namespace TranslitToArmenian
                 {
                     switch (input[i])
                     {
+                        case 'k':
+                            {
+                                if (i + 1 < length && input[i + 1] == 'h')
+                                {
+                                    temp.Append('խ');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('կ');
+                            }
+                            break;
                         case 'c':
                             {
-                               if (i + 1 < length && input[i + 1] == 'h')
-                                   temp.Append('չ');
+                                if (i + 1 < length && input[i + 1] == 'h')
+                                {
+                                    temp.Append('չ');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('ց');
                             }
                             break;
                         case 's':
                             {
                                 if (i + 1 < length && input[i + 1] == 'h')
+                                {
                                     temp.Append('շ');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('ս');
                             }
                             break;
                         case 'd':
                             {
                                 if (i + 1 < length && input[i + 1] == 'z')
+                                {
                                     temp.Append('ձ');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('դ');
                             }
                             break;
                         case 't':
                             {
                                 if (i + 1 < length && input[i + 1] == 's')
-                                    temp.Append('v');
+                                {
+                                    temp.Append('ծ');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('տ');
                             }
                             break;
-                        case ' ':
+                        case 'o':
+                            {
+                                if (i + 2 < length && input[i + 1] == 'v' && input[i + 2] == ' ')
+                                {
+                                    temp.Append("ով ");
+                                    i += 2;
+                                }
+                                else
+                                    if (i + 5 < length && input[i + 1] == 'v' && input[i + 2] == 'k'
+                                    && input[i + 3] == 'e' && input[i + 2] == 'r' && input[i + 2] == ' ')
+                                    {
+                                        temp.Append("ովքեր ");
+                                        i += 5;
+                                    }
+                                    else
+                                    temp.Append('ո');
+
+                            }
+                            break;
+
+                        case 'v':
                             {
                                 if (i + 1 < length && input[i + 1] == 'o')
-                                    if (i + 2 < length && input[i + 2] == 'v')
-                                    {
-                                        if (i + 5 < length && input[i + 2] == 'v')
-                                    }
+                                {
+                                    temp.Append('ո');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('վ');
                             }
                             break;
                         case 'g':
+                            {
+                                if (i + 1 < length && input[i + 1] == 'h')
+                                {
+                                    temp.Append('ղ');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('գ');
+                            }
+                            break;
                         case 'z':
+                            {
+                                if (i + 1 < length && input[i + 1] == 'h')
+                                {
+                                    temp.Append('ժ');
+                                    i++;
+                                }
+                                else
+                                    temp.Append('զ');
+                            }
+                            break;
                         case ':':
                             {
-
-
-
+                                if (i + 1 < length && input[i + 1] == ')')
+                                {
+                                    temp.Append("\u263B");
+                                    i++;
+                                }
+                                else
+                                    temp.Append(':');
                             }
                             break;
                         default:
+                            temp.Append(letters[input[i].ToString()]);
                             break;    
                     }
 
@@ -116,6 +201,8 @@ namespace TranslitToArmenian
 
             return temp.ToString();
         }
+
+        
 
     }
 }
